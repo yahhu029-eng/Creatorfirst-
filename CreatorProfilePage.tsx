@@ -1,0 +1,316 @@
+import { useState } from "react";
+import { BadgeCheck, Heart, Video as VideoIcon, Share2, Settings, Grid3x3 } from "lucide-react";
+import type { Creator, Video } from "@/types";
+import type { DemoState } from "@/hooks/useDemoState";
+import { getVideosByCreator, getVideoById } from "@/data";
+import { FollowButton } from "@/components/FollowButton";
+import { formatCount } from "@/lib/format";
+
+interface CreatorProfilePageProps {
+  creator: Creator;
+  demo: DemoState;
+  onVideoClick: (videoId: string) => void;
+  onOpenShorts: (startIndex: number) => void;
+  isCurrentUser?: boolean;
+}
+
+export function CreatorProfilePage({
+  creator,
+  demo,
+  onVideoClick,
+  onOpenShorts,
+  isCurrentUser = false,
+}: CreatorProfilePageProps) {
+  const [tab, setTab] = useState<"videos" | "shorts" | "liked">("videos");
+
+  // For current user, use userVideos from demo state
+  const allVideos = isCurrentUser
+    ? getVideosByCreator(creator.id, demo.userVideos)
+    : getVideosByCreator(creator.id, demo.userVideos);
+
+  const regularVideos = allVideos.filter((v) => !v.isShort);
+  const shorts = allVideos.filter((v) => v.isShort);
+
+  // Liked videos — only show for current user
+  const likedVideos: Video[] = isCurrentUser
+    ? [...demo.likedVideos]
+        .map((id) => getVideoById(id, demo.userVideos))
+        .filter((v): v is Video => v !== undefined)
+    : [];
+
+  const displayedVideos: Video[] =
+    tab === "videos" ? regularVideos : tab === "shorts" ? shorts : likedVideos;
+
+  // Dynamic stats for current user
+  const dynamicFollowers = isCurrentUser
+    ? creator.followers + demo.followedCreators.size
+    : creator.followers + (demo.isFollowing(creator.id) ? 1 : 0);
+  const dynamicFollowing = isCurrentUser
+    ? creator.following + demo.followedCreators.size
+    : creator.following;
+  const dynamicTotalLikes = isCurrentUser
+    ? creator.totalLikes +
+      demo.userVideos.reduce((sum, v) => sum + v.likes + (demo.isLiked(v.id) ? 1 : 0), 0)
+    : creator.totalLikes;
+
+  return (
+    <div className="pb-24">
+      {/* Banner */}
+      <div className="relative h-32 w-full overflow-hidden">
+        {creator.banner ? (
+          <img src={creator.banner} alt="" className="h-full w-full object-cover" />
+        ) : (
+          <div className="h-full w-full bg-gradient-to-br from-rose-600/30 to-orange-500/20" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
+      </div>
+
+      {/* Profile header */}
+      <div className="relative -mt-12 px-4">
+        <div className="flex items-end justify-between">
+          <img
+            src={creator.avatar}
+            alt={creator.name}
+            className={`h-24 w-24 rounded-full object-cover ring-4 ring-[#0a0a0f] ${
+              creator.isSmallCreator ? "ring-amber-400/50" : ""
+            }`}
+          />
+          {isCurrentUser ? (
+            <button className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-gray-300 active:scale-95">
+              <Settings size={16} />
+              Edit
+            </button>
+          ) : (
+            <div className="flex items-center gap-2">
+              <button className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-gray-300 active:scale-90">
+                <Share2 size={18} />
+              </button>
+              <FollowButton creator={creator} demo={demo} />
+            </div>
+          )}
+        </div>
+
+        {/* Name & handle */}
+        <div className="mt-3">
+          <div className="flex items-center gap-1.5">
+            <h1 className="text-xl font-bold text-white">{creator.name}</h1>
+            {creator.isVerified && <BadgeCheck size={20} className="text-sky-400" />}
+            {creator.isSmallCreator && (
+              <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-400">
+                RISING
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-gray-500">{creator.handle}</p>
+        </div>
+
+        {/* Stats */}
+        <div className="mt-4 flex gap-5">
+          <div>
+            <span className="text-base font-bold text-white">{formatCount(dynamicFollowers)}</span>
+            <span className="ml-1 text-xs text-gray-500">followers</span>
+          </div>
+          <div>
+            <span className="text-base font-bold text-white">{formatCount(dynamicFollowing)}</span>
+            <span className="ml-1 text-xs text-gray-500">following</span>
+          </div>
+          <div>
+            <span className="text-base font-bold text-white">{formatCount(dynamicTotalLikes)}</span>
+            <span className="ml-1 text-xs text-gray-500">likes</span>
+          </div>
+        </div>
+
+        {/* Bio */}
+        <p className="mt-3 text-sm leading-relaxed text-gray-300">{creator.bio}</p>
+
+        {/* Category tag */}
+        <div className="mt-3">
+          <span className="rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-gray-400">
+            {creator.category}
+          </span>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="mt-5 border-b border-white/10">
+        <div className="mx-auto flex max-w-md">
+          {[
+            { key: "videos" as const, label: "Videos", icon: VideoIcon, count: regularVideos.length },
+            { key: "shorts" as const, label: "Shorts", icon: Grid3x3, count: shorts.length },
+            { key: "liked" as const, label: "Liked", icon: Heart, count: likedVideos.length },
+          ].map(({ key, label, icon: Icon, count }) => (
+            <button
+              key={key}
+              onClick={() => setTab(key)}
+              className={`relative flex flex-1 flex-col items-center gap-1 py-3 transition-colors ${
+                tab === key ? "text-white" : "text-gray-500"
+              }`}
+            >
+              <div className="flex items-center gap-1.5">
+                <Icon size={16} fill={tab === key && key === "liked" ? "currentColor" : "none"} />
+                <span className="text-sm font-semibold">{label}</span>
+                {count > 0 && <span className="text-xs text-gray-600">({count})</span>}
+              </div>
+              {tab === key && (
+                <div className="absolute -bottom-px left-1/2 h-0.5 w-12 -translate-x-1/2 rounded-full bg-gradient-to-r from-rose-500 to-orange-500" />
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content grid */}
+      <div className="mx-auto mt-4 max-w-md px-4">
+        {tab === "liked" && !isCurrentUser && (
+          <div className="py-12 text-center">
+            <Heart size={32} className="mx-auto mb-2 text-gray-700" />
+            <p className="text-sm text-gray-500">Liked videos are private</p>
+          </div>
+        )}
+
+        {tab === "liked" && isCurrentUser && likedVideos.length === 0 && (
+          <div className="py-12 text-center">
+            <Heart size={32} className="mx-auto mb-2 text-gray-700" />
+            <p className="text-sm text-gray-500">
+              Videos you like will appear here. Tap the heart on any video to like it.
+            </p>
+          </div>
+        )}
+
+        {tab === "liked" && isCurrentUser && likedVideos.length > 0 && (
+          <div className="space-y-4">
+            {likedVideos.map((video) => (
+              <button
+                key={video.id}
+                onClick={() => onVideoClick(video.id)}
+                className="group flex w-full gap-3 rounded-xl p-1 text-left active:scale-[0.98]"
+              >
+                <div className="relative h-20 w-36 shrink-0 overflow-hidden rounded-lg">
+                  <img
+                    src={video.thumbnail}
+                    alt={video.title}
+                    className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <span className="absolute bottom-1 right-1 rounded bg-black/80 px-1 py-0.5 text-[10px] text-white">
+                    {video.duration}
+                  </span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white">
+                    {video.title}
+                  </h3>
+                  <p className="mt-1 text-xs text-gray-500">
+                    {formatCount(video.views)} views · {video.uploadDate}
+                  </p>
+                  <div className="mt-1 flex items-center gap-1 text-xs text-gray-600">
+                    <Heart size={11} className="text-rose-500" fill="currentColor" />
+                    {formatCount(video.likes + 1)}
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {tab === "videos" && displayedVideos.length === 0 && (
+          <div className="py-12 text-center">
+            <VideoIcon size={32} className="mx-auto mb-2 text-gray-700" />
+            <p className="text-sm text-gray-500">
+              {isCurrentUser
+                ? "No videos yet. Upload one from the Upload tab!"
+                : "No videos yet"}
+            </p>
+          </div>
+        )}
+
+        {tab === "videos" && displayedVideos.length > 0 && (
+          <div className="space-y-4">
+            {displayedVideos.map((video) => (
+              <button
+                key={video.id}
+                onClick={() => onVideoClick(video.id)}
+                className="group flex w-full gap-3 rounded-xl p-1 text-left active:scale-[0.98]"
+              >
+                <div className="relative h-20 w-36 shrink-0 overflow-hidden rounded-lg">
+                  {video.videoUrl ? (
+                    <video
+                      src={video.videoUrl}
+                      className="h-full w-full object-cover"
+                      muted
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img
+                      src={video.thumbnail}
+                      alt={video.title}
+                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  )}
+                  <span className="absolute bottom-1 right-1 rounded bg-black/80 px-1 py-0.5 text-[10px] text-white">
+                    {video.duration}
+                  </span>
+                  {video.isUserUploaded && (
+                    <span className="absolute left-1 top-1 rounded bg-amber-500/90 px-1 py-0.5 text-[8px] font-bold text-black">
+                      YOURS
+                    </span>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white">
+                    {video.title}
+                  </h3>
+                  <p className="mt-1 text-xs text-gray-500">
+                    {formatCount(video.views)} views · {video.uploadDate}
+                  </p>
+                  <div className="mt-1 flex items-center gap-1 text-xs text-gray-600">
+                    <Heart
+                      size={11}
+                      className={demo.isLiked(video.id) ? "text-rose-500" : "text-rose-500/60"}
+                      fill="currentColor"
+                    />
+                    {formatCount(video.likes + (demo.isLiked(video.id) ? 1 : 0))}
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {tab === "shorts" && displayedVideos.length > 0 && (
+          <div className="grid grid-cols-3 gap-2">
+            {displayedVideos.map((short) => (
+              <button
+                key={short.id}
+                onClick={() => onOpenShorts(0)}
+                className="group relative aspect-[9/16] overflow-hidden rounded-xl active:scale-95"
+              >
+                <img
+                  src={short.thumbnail}
+                  alt={short.title}
+                  className="h-full w-full object-cover transition-transform group-hover:scale-110"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <div className="absolute bottom-1.5 left-1.5 right-1.5">
+                  <p className="line-clamp-2 text-[10px] font-semibold leading-tight text-white">
+                    {short.title}
+                  </p>
+                  <div className="mt-0.5 flex items-center gap-0.5">
+                    <Heart size={9} className="text-white/80" fill="currentColor" />
+                    <span className="text-[9px] text-white/80">{formatCount(short.likes)}</span>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {tab === "shorts" && displayedVideos.length === 0 && (
+          <p className="py-12 text-center text-sm text-gray-500">No shorts yet</p>
+        )}
+      </div>
+    </div>
+  );
+}
