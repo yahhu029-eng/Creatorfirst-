@@ -1,5 +1,9 @@
 name: Deploy CreatorFirst to GitHub Pages
 
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
 on:
   push:
     branches: [main]
@@ -38,3 +42,5 @@ jobs:
       - name: Deploy
         uses: actions/deploy-pages@v4
         
+        
+    
