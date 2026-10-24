@@ -26,6 +26,10 @@ export function HomePage({
 }: HomePageProps) {
   const shorts = getShorts(demo.userVideos);
 const smallCreators = getSmallCreators();
+const regularVideos = [
+  ...getRegularVideos(demo.userVideos),
+  ...cloudVideos,
+];
 const [cloudVideos, setCloudVideos] = useState<any[]>([]);
 
 useEffect(() => {
