@@ -296,17 +296,13 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
 
   return (
     <div className="mx-auto max-w-md px-4 pb-24 pt-4">
-     {/* Demo notice */}
-<div className="mb-5 flex items-start gap-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3">
-  <Info size={18} className="mt-0.5 shrink-0 text-amber-400" />
+     {/* Cloud upload notice */}
+<div className="mb-5 flex items-start gap-2.5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3">
+  <Info size={18} className="mt-0.5 shrink-0 text-emerald-400" />
   <div>
     <p className="text-sm font-semibold text-emerald-300">Cloud Upload</p>
     <p className="mt-0.5 text-xs leading-relaxed text-emerald-200/70">
-  Upload your video to cloud storage and share it with other users.
-</p>
-      Videos are saved locally on this device only — they are not uploaded to a server,
-      stored in the cloud, or shared with other users. A real backend is needed for public
-      sharing.
+      Upload your video to cloud storage and share it with other users.
     </p>
   </div>
 </div>
