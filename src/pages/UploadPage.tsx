@@ -493,7 +493,7 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
           )}
         </button>
         <p className="text-center text-[11px] text-gray-600">
-          By uploading, you acknowledge this is a demo — videos are stored locally on your device only.
+          By uploading, you acknowledge this is a demo — Videos are stored locally on your device only.
         </p>
       </form>
     </div>
