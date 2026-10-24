@@ -296,18 +296,18 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
 
   return (
     <div className="mx-auto max-w-md px-4 pb-24 pt-4">
-      {/* Demo notice */}
-      <div className="mb-5 flex items-start gap-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3">
-        <Info size={18} className="mt-0.5 shrink-0 text-amber-400" />
-        <div>
-          <p className="text-sm font-semibold text-amber-300">Demo Mode</p>
-          <p className="mt-0.5 text-xs leading-relaxed text-amber-200/70">
-            Videos are saved locally on this device only — they are not uploaded to a server,
-            stored in the cloud, or shared with other users. A real backend is needed for public
-            sharing.
-          </p>
-        </div>
-      </div>
+     {/* Demo notice */}
+<div className="mb-5 flex items-start gap-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3">
+  <Info size={18} className="mt-0.5 shrink-0 text-amber-400" />
+  <div>
+    <p className="text-sm font-semibold text-amber-300">Demo Mode</p>
+    <p className="mt-0.5 text-xs leading-relaxed text-amber-200/70">
+      Videos are saved locally on this device only — they are not uploaded to a server,
+      stored in the cloud, or shared with other users. A real backend is needed for public
+      sharing.
+    </p>
+  </div>
+</div>
 
       <h2 className="mb-1 text-xl font-bold text-white">Share your content</h2>
       <p className="mb-5 text-sm text-gray-500">Pick a video, add details, and preview the upload flow.</p>
