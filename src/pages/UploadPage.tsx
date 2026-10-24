@@ -203,19 +203,17 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
 
       const videoUrl = publicData.publicUrl;
 
-      const { data: savedVideo, error: dbError } = await supabase
-        .from("Videos")
-        .insert({
-          title: title.trim(),
-          video_url: videoUrl,
-          user_id: user.id,
-        })
-        .select()
-        .single();
+      const { error: dbError } = await supabase
+  .from("Videos")
+  .insert({
+    title: title.trim(),
+    video_url: videoUrl,
+    user_id: user.id,
+  });
 
-      if (dbError) {
+if (dbError) {
   throw new Error("DATABASE ERROR: " + dbError.message);
-      }
+}
 
       const newVideo: Video = {
         id: String(savedVideo.id),
