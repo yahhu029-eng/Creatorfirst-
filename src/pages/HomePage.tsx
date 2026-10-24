@@ -64,7 +64,7 @@ export function HomePage({
     loadVideos();
   }, []);
   
-  const allUserVideos = [...cloudVideos, ...demo.userVideos];
+  const allUserVideos = [...cloudVideos, ...alluserVideos];
 const regularVideos = getRegularVideos(allUserVideos);
 const shorts = getShorts(allUserVideos);
   const smallCreators = getSmallCreators();
@@ -85,24 +85,23 @@ const shorts = getShorts(allUserVideos);
       </section>
 
       {/* Your uploads section (only if user has uploaded) */}
-      {demo.userVideos.length > 0 && (
+      {allUserVideos.length > 0 && (
         <section>
           <div className="flex items-center gap-2 px-4">
             <Sparkles size={18} className="text-amber-400" />
             <h2 className="text-base font-bold text-white">Your Uploads</h2>
             <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-400">
-              {demo.userVideos.length} local
+              {alluserVideos.length} local
             </span>
           </div>
           <p className="mt-1 px-4 text-xs text-gray-500">
             Saved on this device — not publicly shared
           </p>
           <div className="mt-3 space-y-4 px-4">
-            {demo.userVideos.map((video) => (
+            {alluserVideos.map((video) => (
               <VideoCard
                 key={video.id}
                 video={video}
-                demo={demo}
                 onCreatorClick={onCreatorClick}
                 onVideoClick={onVideoClick}
                 onOpenComments={onOpenComments}
