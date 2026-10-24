@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 import { Flame, ChevronRight, Sparkles, TrendingUp, Heart } from "lucide-react";
 import type { DemoState } from "@/hooks/useDemoState";
 import { getRegularVideos, getShorts, getSmallCreators, getCreatorById } from "@/data";
