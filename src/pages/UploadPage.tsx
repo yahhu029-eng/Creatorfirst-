@@ -164,134 +164,94 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
+
+    if (!validateForm() || !file) return;
 
     setUploading(true);
-    setUploadProgress(0);
+    setUploadProgress(10);
+    setErrors((prev) => ({ ...prev, file: undefined }));
 
-    // Simulate upload progress
-    const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    try {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
 
-  if (!validateForm() || !file) return;
+      if (userError) throw userError;
+      if (!user) throw new Error("Please sign in again.");
 
-  setUploading(true);
-  setUploadProgress(10);
-  setErrors((prev) => ({ ...prev, file: undefined }));
+      const extension = file.name.split(".").pop() || "mp4";
+      const filePath = `${user.id}/${Date.now()}.${extension}`;
 
-  try {
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
+      const { error: uploadError } = await supabase.storage
+        .from("videos")
+        .upload(filePath, file, {
+          contentType: file.type,
+          upsert: false,
+        });
 
-    if (userError) throw userError;
-    if (!user) throw new Error("Please sign in again.");
+      if (uploadError) throw uploadError;
 
-    const extension = file.name.split(".").pop() || "mp4";
-    const filePath = `${user.id}/${Date.now()}.${extension}`;
+      setUploadProgress(70);
 
-    const { error: uploadError } = await supabase.storage
-      .from("videos")
-      .upload(filePath, file, {
-        contentType: file.type,
-        upsert: false,
-      });
+      const { data: publicData } = supabase.storage
+        .from("videos")
+        .getPublicUrl(filePath);
 
-    if (uploadError) throw uploadError;
+      const videoUrl = publicData.publicUrl;
 
-    setUploadProgress(70);
+      const { data: savedVideo, error: dbError } = await supabase
+        .from("videos")
+        .insert({
+          title: title.trim(),
+          video_url: videoUrl,
+          user_id: user.id,
+        })
+        .select()
+        .single();
 
-    const { data: publicData } = supabase.storage
-      .from("videos")
-      .getPublicUrl(filePath);
+      if (dbError) throw dbError;
 
-    const videoUrl = publicData.publicUrl;
-
-    const { data: savedVideo, error: dbError } = await supabase
-      .from("videos")
-      .insert({
+      const newVideo: Video = {
+        id: String(savedVideo.id),
         title: title.trim(),
-        video_url: videoUrl,
-        user_id: user.id,
-      })
-      .select()
-      .single();
+        thumbnail: thumbnail ?? "",
+        creatorId: user.id,
+        views: 0,
+        likes: 0,
+        uploadDate: "just now",
+        duration,
+        description: description.trim() || "No description provided.",
+        isShort: false,
+        category,
+        comments: [],
+        videoUrl,
+        isUserUploaded: true,
+      };
 
-    if (dbError) throw dbError;
+      demo.addUserVideo(newVideo);
+      setUploadProgress(100);
+      setSubmitted(true);
+      setUploading(false);
 
-    const newVideo: Video = {
-      id: String(savedVideo.id),
-      title: title.trim(),
-      thumbnail:
-        thumbnail ??
-        "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=940&h=560&fit=crop",
-      creatorId: "me",
-      views: 0,
-      likes: 0,
-      uploadDate: "just now",
-      duration,
-      description: description.trim() || "No description provided.",
-      isShort: false,
-      category,
-      comments: [],
-      videoUrl,
-      isUserUploaded: true,
-    };
-
-    demo.addUserVideo(newVideo);
-    setUploadProgress(100);
-    setSubmitted(true);
-    setUploading(false);
-
-    setTimeout(() => {
-      onUploaded();
-    }, 1500);
-  } catch (error) {
-    setErrors((prev) => ({
-      ...prev,
-      file:
-        error instanceof Error
-          ? `Upload failed: ${error.message}`
-          : "Upload failed. Please try again.",
-    }));
-    setUploading(false);
-  }
-};
+      setTimeout(() => onUploaded(), 1500);
+    } catch (error) {
+      setErrors((prev) => ({
+        ...prev,
+        file:
+          error instanceof Error
+            ? `Upload failed: ${error.message}`
+            : "Upload failed. Please try again.",
+      }));
+      setUploading(false);
+    }
+  };
 
   // Watch for upload completion
-  if (uploading && uploadProgress >= 100 && !submitted) {
-    setSubmitted(true);
-    setUploading(false);
-
-    // Create the video object and add to demo state
-    const newVideo: Video = {
-      id: `user-${Date.now()}`,
-      title: title.trim(),
-      thumbnail:
-        thumbnail ??
-        "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=940&h=560&fit=crop",
-      creatorId: "me",
-      views: 0,
-      likes: 0,
-      uploadDate: "just now",
-      duration,
-      description: description.trim() || "No description provided.",
-      isShort: false,
-      category,
-      comments: [],
-      videoUrl: filePreview ?? undefined,
-      isUserUploaded: true,
-    };
-    demo.addUserVideo(newVideo);
-
-    setTimeout(() => {
-      onUploaded();
-    }, 1800);
-  }
+  
 
   const resetForm = () => {
     if (filePreview) URL.revokeObjectURL(filePreview);
