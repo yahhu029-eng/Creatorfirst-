@@ -213,7 +213,9 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
         .select()
         .single();
 
-      if (dbError) throw dbError;
+      if (dbError) {
+  throw new Error("DATABASE ERROR: " + dbError.message);
+      }
 
       const newVideo: Video = {
         id: String(savedVideo.id),
