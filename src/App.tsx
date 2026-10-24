@@ -42,17 +42,6 @@ useEffect(() => {
 
   return () => listener.subscription.unsubscribe();
 }, []);
-  
-
-  const { data: listener } = supabase.auth.onAuthStateChange(
-    (_event, session) => {
-      setAuthenticated(!!session);
-      setCheckingAuth(false);
-    }
-  );
-
-  return () => listener.subscription.unsubscribe();
-}, []);
 
 if (checkingAuth) {
   return (
