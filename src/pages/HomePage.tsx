@@ -173,9 +173,7 @@ const shorts = getShorts(allUserVideos);
           <h2 className="text-base font-bold text-white">Recommended</h2>
         </div>
         <div className="mt-3 space-y-4 px-4">
-          {regularVideos
-            .filter((v) => !v.isUserUploaded)
-            .map((video) => (
+          {regularVideos.map((video) => (
               <VideoCard
                 key={video.id}
                 video={video}
