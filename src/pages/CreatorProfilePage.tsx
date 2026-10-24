@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BadgeCheck, Heart, Video as VideoIcon, Share2, Settings, Grid3x3 } from "lucide-react";
 import type { Creator, Video } from "@/types";
 import type { DemoState } from "@/hooks/useDemoState";
 import { getVideosByCreator, getVideoById } from "@/data";
+import { supabase } from "@/lib/supabase";
 import { FollowButton } from "@/components/FollowButton";
 import { formatCount } from "@/lib/format";
 
@@ -23,10 +24,60 @@ export function CreatorProfilePage({
 }: CreatorProfilePageProps) {
   const [tab, setTab] = useState<"videos" | "shorts" | "liked">("videos");
 
+  
+  const [cloudVideos, setCloudVideos] = useState<Video[]>([]);
+
+  useEffect(() => {
+    async function loadCloudVideos() {
+      if (!isCurrentUser) return;
+
+      const { data: authData } = await supabase.auth.getUser();
+      const user = authData.user;
+
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("Videos")
+        .select("*")
+        .eq("user_id", user.id);
+
+      if (error) {
+        console.error("Profile videos loading error:", error.message);
+        return;
+      }
+
+      if (data) {
+        setCloudVideos(
+          data.map((row) => ({
+            id: String(row.id),
+            title: row.title || "Untitled Video",
+            thumbnail: "",
+            creatorId: creator.id,
+            views: 0,
+            likes: 0,
+            uploadDate: "Recently",
+            duration: "0:00",
+            description: "",
+            isShort: false,
+            comments: [],
+            videoUrl: row.video_url,
+            isUserUploaded: true,
+          }))
+        );
+      }
+    }
+
+    loadCloudVideos();
+  }, [isCurrentUser, creator.id]);
+  
+
   // For current user, use userVideos from demo state
-  const allVideos = isCurrentUser
-    ? getVideosByCreator(creator.id, demo.userVideos)
-    : getVideosByCreator(creator.id, demo.userVideos);
+  
+const allVideos = [
+  ...getVideosByCreator(creator.id, demo.userVideos),
+  ...(isCurrentUser ? cloudVideos : []),
+];
+  
 
   const regularVideos = allVideos.filter((v) => !v.isShort);
   const shorts = allVideos.filter((v) => v.isShort);
