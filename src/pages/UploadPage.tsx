@@ -187,7 +187,7 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
       const filePath = `${user.id}/${Date.now()}.${extension}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("videos")
+        .from("Videos")
         .upload(filePath, file, {
           contentType: file.type,
           upsert: false,
