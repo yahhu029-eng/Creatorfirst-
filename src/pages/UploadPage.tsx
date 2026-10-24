@@ -276,7 +276,7 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20">
             <CheckCircle2 size={36} className="text-green-400" />
           </div>
-          <h3 className="text-lg font-bold text-white">Upload Complete (Demo)</h3>
+         <h3 className="text-lg font-bold text-white">Video Uploaded Successfully!</h3> 
           <p className="mt-1 max-w-xs text-sm text-gray-400">
   Your video "{title}" has been uploaded to cloud storage. It may not appear in the home feed until the feed is connected to the database.
 </p>
