@@ -64,8 +64,9 @@ export function HomePage({
     loadVideos();
   }, []);
   
-  const regularVideos = getRegularVideos(demo.userVideos);
-  const shorts = getShorts(demo.userVideos);
+  const allUserVideos = [...cloudVideos, ...demo.userVideos];
+const regularVideos = getRegularVideos(allUserVideos);
+const shorts = getShorts(allUserVideos);
   const smallCreators = getSmallCreators();
 
   return (
