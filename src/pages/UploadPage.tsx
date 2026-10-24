@@ -278,9 +278,9 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
           </div>
           <h3 className="text-lg font-bold text-white">Upload Complete (Demo)</h3>
           <p className="mt-1 max-w-xs text-sm text-gray-400">
-            Your video "{title}" has been added to your profile and the home feed. This is a
-            local demo — the video is not publicly shared or stored online.
-          </p>
+  Your video "{title}" has been uploaded to cloud storage. It may not appear in the home feed until the feed is connected to the database.
+</p>
+            
           <button
             onClick={resetForm}
             className="mt-6 rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-gray-300 active:scale-95"
