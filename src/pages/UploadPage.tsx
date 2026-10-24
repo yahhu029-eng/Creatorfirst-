@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import type { Video } from "@/types";
 import type { DemoState } from "@/hooks/useDemoState";
-
+import { supabase } from "@/lib/supabase";
 interface UploadPageProps {
   demo: DemoState;
   onUploaded: () => void;
