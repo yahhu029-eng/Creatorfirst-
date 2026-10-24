@@ -17,7 +17,7 @@ interface UploadPageProps {
   onUploaded: () => void;
 }
 
-const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
+const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const categories = [
   "Gaming",
   "Food",
@@ -461,7 +461,7 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
             <div className="flex items-center justify-between text-xs">
               <span className="flex items-center gap-1.5 text-gray-400">
                 <Loader2 size={14} className="animate-spin" />
-                Uploading (demo)...
+                Uploading video 
               </span>
               <span className="font-semibold text-white">{uploadProgress}%</span>
             </div>
@@ -488,13 +488,14 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
           ) : (
             <>
               <UploadCloud size={18} />
-              Publish Video (Demo)
+              Publish Video
+              
             </>
           )}
         </button>
         <p className="text-center text-[11px] text-gray-600">
-          By uploading, you acknowledge this is a demo — Videos are stored locally on your device only.
-        </p>
+          
+        </p>By uploading, you confirm that you have the right to share this video.
       </form>
     </div>
   );
