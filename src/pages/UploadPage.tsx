@@ -238,13 +238,14 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
       setUploading(false);
 
       setTimeout(() => onUploaded(), 1500);
-    } catch (error) {
+        } catch (error) {
+      console.error("Upload error:", error);
       setErrors((prev) => ({
         ...prev,
         file:
           error instanceof Error
             ? `Upload failed: ${error.message}`
-            : "Upload failed. Please try again.",
+            : `Upload failed: ${JSON.stringify(error)}`,
       }));
       setUploading(false);
     }
