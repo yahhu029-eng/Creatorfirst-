@@ -20,6 +20,20 @@ const [newPassword, setNewPassword] = useState("");
     setMessage("");
 
     try {
+      if (isRecovery) {
+        const { error } = await supabase.auth.updateUser({
+          password: newPassword,
+        });
+
+        if (error) throw error;
+
+        setMessage("Password reset successful! Ab Sign In karo.");
+        setIsRecovery(false);
+        setNewPassword("");
+        await supabase.auth.signOut();
+        return;
+      }
+      
       if (isSignup) {
         const { data, error } = await supabase.auth.signUp({
           email: email.trim(),
