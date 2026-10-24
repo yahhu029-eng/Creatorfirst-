@@ -19,12 +19,25 @@ import { CommentSheet } from "@/components/CommentSheet";
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
 const [checkingAuth, setCheckingAuth] = useState(true);
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
+
 
 
 useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
     (event, session) => {
       if (event === "PASSWORD_RECOVERY") {
+        const { data: authListener } = supabase.auth.onAuthStateChange(
+  (event, session) => {
+    if (event === "PASSWORD_RECOVERY") {
+      setIsPasswordRecovery(true);
+      setAuthenticated(false);
+    } else {
+      setAuthenticated(!!session);
+    }
+    setCheckingAuth(false);
+  }
+);
         setAuthenticated(false);
       } else {
         setAuthenticated(!!session);
@@ -66,14 +79,17 @@ if (checkingAuth) {
   );
 }
 
-if (!authenticated) {
-  return <AuthPage onLogin={() => setAuthenticated(true)} />;
+if (!authenticated || isPasswordRecovery) {
+  return (
+    <AuthPage
+      onLogin={() => {
+        setAuthenticated(true);
+        setIsPasswordRecovery(false);
+      }}
+      isRecovery={isPasswordRecovery}
+    />
+  );
 }
-
-  const activeTab: TabKey =
-    view.tab === "creator" || view.tab === "shorts" || view.tab === "video"
-      ? "home"
-      : view.tab;
 
   const navigateTab = (tab: TabKey) => setView({ tab });
 
