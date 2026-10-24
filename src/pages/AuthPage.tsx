@@ -139,6 +139,37 @@ const [newPassword, setNewPassword] = useState("");
           
         </button>
       </form>
+      {!isRecovery && (
+  <button
+    type="button"
+    onClick={async () => {
+      if (!email.trim()) {
+        setMessage("Pehle apna email address enter karo.");
+        return;
+      }
+
+      setLoading(true);
+      setMessage("");
+
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        email.trim(),
+        {
+          redirectTo: window.location.origin + "/Creatorfirst-/",
+        }
+      );
+
+      setLoading(false);
+      setMessage(
+        error
+          ? error.message
+          : "Password reset email bhej di gayi hai. Inbox aur Spam check karo."
+      );
+    }}
+    className="mt-4 w-full text-sm text-blue-400"
+  >
+    Forgot password?
+  </button>
+)}
 
       <p className="mt-6 text-center text-sm text-gray-400">
         {isSignup ? "Already have an account?" : "New to CreatorFirst?"}{" "}
