@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import AuthPage from "@/pages/AuthPage";
+import { supabase } from "@/lib/supabase";
 import { useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import type { TabKey, ViewKey } from "@/types";
@@ -14,6 +17,36 @@ import { ShortsViewer } from "@/components/ShortsViewer";
 import { CommentSheet } from "@/components/CommentSheet";
 
 function App() {
+  const [authenticated, setAuthenticated] = useState(false);
+const [checkingAuth, setCheckingAuth] = useState(true);
+
+useEffect(() => {
+  supabase.auth.getSession().then(({ data }) => {
+    setAuthenticated(!!data.session);
+    setCheckingAuth(false);
+  });
+
+  const { data: listener } = supabase.auth.onAuthStateChange(
+    (_event, session) => {
+      setAuthenticated(!!session);
+      setCheckingAuth(false);
+    }
+  );
+
+  return () => listener.subscription.unsubscribe();
+}, []);
+
+if (checkingAuth) {
+  return (
+    <div className="min-h-screen bg-[#0a0a0f] text-white flex items-center justify-center">
+      Loading CreatorFirst...
+    </div>
+  );
+}
+
+if (!authenticated) {
+  return <AuthPage onLogin={() => setAuthenticated(true)} />;
+}
   const demo = useDemoState();
   const [view, setView] = useState<ViewKey>({ tab: "home" });
   const [commentVideoId, setCommentVideoId] = useState<string | null>(null);
