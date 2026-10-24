@@ -11,7 +11,7 @@ export default function AuthPage({
   isRecovery: recoveryMode = false,
 }: AuthPageProps) {
   const [isSignup, setIsSignup] = useState(true);
-  const [isRecovery, setIsRecovery] = useState(false);
+  const [isRecovery, setIsRecovery] = useState(recoveryMode);
 const [newPassword, setNewPassword] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
