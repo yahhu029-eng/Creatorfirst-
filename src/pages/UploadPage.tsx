@@ -216,7 +216,7 @@ if (dbError) {
 }
 
       const newVideo: Video = {
-        id: String(savedVideo.id),
+        id: `${Date.now()}`,
         title: title.trim(),
         thumbnail: thumbnail ?? "",
         creatorId: user.id,
