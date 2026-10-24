@@ -6,7 +6,10 @@ interface AuthPageProps {
   isRecovery?: boolean;
 }
 
-export default function AuthPage({ onLogin }: AuthPageProps) {
+export default function AuthPage({
+  onLogin,
+  isRecovery: recoveryMode = false,
+}: AuthPageProps) {
   const [isSignup, setIsSignup] = useState(true);
   const [isRecovery, setIsRecovery] = useState(false);
 const [newPassword, setNewPassword] = useState("");
