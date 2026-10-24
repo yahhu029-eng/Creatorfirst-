@@ -173,16 +173,94 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
     setUploadProgress(0);
 
     // Simulate upload progress
-    const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        return prev + 5;
+    const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!validateForm() || !file) return;
+
+  setUploading(true);
+  setUploadProgress(10);
+  setErrors((prev) => ({ ...prev, file: undefined }));
+
+  try {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError) throw userError;
+    if (!user) throw new Error("Please sign in again.");
+
+    const extension = file.name.split(".").pop() || "mp4";
+    const filePath = `${user.id}/${Date.now()}.${extension}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("videos")
+      .upload(filePath, file, {
+        contentType: file.type,
+        upsert: false,
       });
-    }, 80);
-  };
+
+    if (uploadError) throw uploadError;
+
+    setUploadProgress(70);
+
+    const { data: publicData } = supabase.storage
+      .from("videos")
+      .getPublicUrl(filePath);
+
+    const videoUrl = publicData.publicUrl;
+
+    const { data: savedVideo, error: dbError } = await supabase
+      .from("videos")
+      .insert({
+        title: title.trim(),
+        video_url: videoUrl,
+        user_id: user.id,
+      })
+      .select()
+      .single();
+
+    if (dbError) throw dbError;
+
+    const newVideo: Video = {
+      id: String(savedVideo.id),
+      title: title.trim(),
+      thumbnail:
+        thumbnail ??
+        "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=940&h=560&fit=crop",
+      creatorId: "me",
+      views: 0,
+      likes: 0,
+      uploadDate: "just now",
+      duration,
+      description: description.trim() || "No description provided.",
+      isShort: false,
+      category,
+      comments: [],
+      videoUrl,
+      isUserUploaded: true,
+    };
+
+    demo.addUserVideo(newVideo);
+    setUploadProgress(100);
+    setSubmitted(true);
+    setUploading(false);
+
+    setTimeout(() => {
+      onUploaded();
+    }, 1500);
+  } catch (error) {
+    setErrors((prev) => ({
+      ...prev,
+      file:
+        error instanceof Error
+          ? `Upload failed: ${error.message}`
+          : "Upload failed. Please try again.",
+    }));
+    setUploading(false);
+  }
+};
 
   // Watch for upload completion
   if (uploading && uploadProgress >= 100 && !submitted) {
