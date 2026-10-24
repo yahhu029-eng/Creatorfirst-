@@ -24,28 +24,19 @@ const [checkingAuth, setCheckingAuth] = useState(true);
 
 
 useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
+  const { data: authListener } = supabase.auth.onAuthStateChange(
     (event, session) => {
       if (event === "PASSWORD_RECOVERY") {
-        const { data: authListener } = supabase.auth.onAuthStateChange(
-  (event, session) => {
-    if (event === "PASSWORD_RECOVERY") {
-      setIsPasswordRecovery(true);
-      setAuthenticated(false);
-    } else {
-      setAuthenticated(!!session);
-    }
-    setCheckingAuth(false);
-  }
-);
+        setIsPasswordRecovery(true);
         setAuthenticated(false);
       } else {
         setAuthenticated(!!session);
       }
+
       setCheckingAuth(false);
     }
   );
-  
+
   supabase.auth.getSession()
     .then(({ data }) => {
       setAuthenticated(!!data.session);
@@ -57,12 +48,10 @@ useEffect(() => {
       setCheckingAuth(false);
     });
 
-  const { data: listener } = supabase.auth.onAuthStateChange(
-    (_event, session) => {
-      setAuthenticated(!!session);
-      setCheckingAuth(false);
-    }
-  );
+  return () => {
+    authListener.subscription.unsubscribe();
+  };
+}, []);
 
   return () => listener.subscription.unsubscribe();
 }, []);
