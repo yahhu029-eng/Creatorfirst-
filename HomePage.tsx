@@ -172,7 +172,6 @@ useEffect(() => {
         </div>
         <div className="mt-3 space-y-4 px-4">
           {regularVideos
-            .filter((v) => !v.isUserUploaded)
             .map((video) => (
               <VideoCard
                 key={video.id}
