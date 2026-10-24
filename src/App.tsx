@@ -20,11 +20,29 @@ function App() {
   const [authenticated, setAuthenticated] = useState(false);
 const [checkingAuth, setCheckingAuth] = useState(true);
 
+
 useEffect(() => {
-  supabase.auth.getSession().then(({ data }) => {
-    setAuthenticated(!!data.session);
-    setCheckingAuth(false);
-  });
+  supabase.auth.getSession()
+    .then(({ data }) => {
+      setAuthenticated(!!data.session);
+    })
+    .catch(() => {
+      setAuthenticated(false);
+    })
+    .finally(() => {
+      setCheckingAuth(false);
+    });
+
+  const { data: listener } = supabase.auth.onAuthStateChange(
+    (_event, session) => {
+      setAuthenticated(!!session);
+      setCheckingAuth(false);
+    }
+  );
+
+  return () => listener.subscription.unsubscribe();
+}, []);
+  
 
   const { data: listener } = supabase.auth.onAuthStateChange(
     (_event, session) => {
