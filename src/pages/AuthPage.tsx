@@ -128,11 +128,15 @@ const [newPassword, setNewPassword] = useState("");
           disabled={loading}
           className="w-full rounded-xl bg-blue-600 px-4 py-3 font-semibold disabled:opacity-50"
         >
+
           {loading
-            ? "Please wait..."
-            : isSignup
-              ? "Create Account"
-              : "Sign In"}
+  ? "Please wait..."
+  : isRecovery
+    ? "Reset Password"
+    : isSignup
+      ? "Create Account"
+      : "Sign In"}
+          
         </button>
       </form>
 
