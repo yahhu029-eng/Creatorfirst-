@@ -22,7 +22,8 @@ export function HomePage({
   onOpenShorts,
   onDiscoverMore,
 }: HomePageProps) {
-  const regularVideos = getRegularVideos(demo.userVideos);
+  const shorts = getShorts(demo.userVideos);
+const smallCreators = getSmallCreators();
   const shorts = getShorts(demo.userVideos);
   const smallCreators = getSmallCreators();
 
