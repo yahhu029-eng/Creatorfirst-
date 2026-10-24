@@ -198,13 +198,13 @@ export function UploadPage({ demo, onUploaded }: UploadPageProps) {
       setUploadProgress(70);
 
       const { data: publicData } = supabase.storage
-        .from("videos")
+        .from("Videos")
         .getPublicUrl(filePath);
 
       const videoUrl = publicData.publicUrl;
 
       const { data: savedVideo, error: dbError } = await supabase
-        .from("videos")
+        .from("Videos")
         .insert({
           title: title.trim(),
           video_url: videoUrl,
