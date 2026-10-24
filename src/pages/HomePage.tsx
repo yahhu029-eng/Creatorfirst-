@@ -1,3 +1,4 @@
+import type { Video } from "@/types";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Flame, ChevronRight, Sparkles, TrendingUp, Heart } from "lucide-react";
@@ -24,6 +25,45 @@ export function HomePage({
   onOpenShorts,
   onDiscoverMore,
 }: HomePageProps) {
+    const [cloudVideos, setCloudVideos] = useState<Video[]>([]);
+
+  useEffect(() => {
+    async function loadVideos() {
+      const { data, error } = await supabase
+        .from("videos")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Could not load videos:", error.message);
+        return;
+      }
+
+      if (data) {
+        const mappedVideos: Video[] = data.map((row) => ({
+          id: row.id,
+          title: row.title,
+          thumbnail:
+            "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg",
+          creatorId: "me",
+          views: 0,
+          likes: 0,
+          uploadDate: "Recently",
+          duration: "0:00",
+          description: "",
+          isShort: true,
+          comments: [],
+          videoUrl: row.video_url,
+          isUserUploaded: true,
+        }));
+
+        setCloudVideos(mappedVideos);
+      }
+    }
+
+    loadVideos();
+  }, []);
+  
   const regularVideos = getRegularVideos(demo.userVideos);
   const shorts = getShorts(demo.userVideos);
   const smallCreators = getSmallCreators();
