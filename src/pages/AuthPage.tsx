@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 interface AuthPageProps {
@@ -7,6 +7,8 @@ interface AuthPageProps {
 
 export default function AuthPage({ onLogin }: AuthPageProps) {
   const [isSignup, setIsSignup] = useState(true);
+  const [isRecovery, setIsRecovery] = useState(false);
+const [newPassword, setNewPassword] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
