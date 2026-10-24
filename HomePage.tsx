@@ -26,8 +26,42 @@ export function HomePage({
 }: HomePageProps) {
   const shorts = getShorts(demo.userVideos);
 const smallCreators = getSmallCreators();
-  const shorts = getShorts(demo.userVideos);
-  const smallCreators = getSmallCreators();
+const [cloudVideos, setCloudVideos] = useState<any[]>([]);
+
+useEffect(() => {
+  async function loadVideos() {
+    const { data, error } = await supabase
+      .from("Videos")
+      .select("*");
+
+    if (error) {
+      console.error("Video loading error:", error.message);
+      return;
+    }
+
+    if (data) {
+      setCloudVideos(
+        data.map((row) => ({
+          id: String(row.id),
+          title: row.title || "Untitled Video",
+          thumbnail: "",
+          creatorId: row.user_id || "me",
+          views: 0,
+          likes: 0,
+          uploadDate: "Recently",
+          duration: "0:00",
+          description: "",
+          isShort: false,
+          comments: [],
+          videoUrl: row.video_url,
+          isUserUploaded: true,
+        }))
+      );
+    }
+  }
+
+  loadVideos();
+}, []);
 
   return (
     <div className="space-y-6 pb-24">
