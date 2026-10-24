@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase";
 
 interface AuthPageProps {
   onLogin: () => void;
+  isRecovery?: boolean;
 }
 
 export default function AuthPage({ onLogin }: AuthPageProps) {
