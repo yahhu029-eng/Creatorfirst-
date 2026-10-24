@@ -64,7 +64,7 @@ export function HomePage({
     loadVideos();
   }, []);
   
-  const allUserVideos = [...cloudVideos, ...alluserVideos];
+  const allUserVideos = [...cloudVideos, ...demo.userVideos];
 const regularVideos = getRegularVideos(allUserVideos);
 const shorts = getShorts(allUserVideos);
   const smallCreators = getSmallCreators();
@@ -91,17 +91,18 @@ const shorts = getShorts(allUserVideos);
             <Sparkles size={18} className="text-amber-400" />
             <h2 className="text-base font-bold text-white">Your Uploads</h2>
             <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-400">
-              {alluserVideos.length} local
+              {allUserVideos.length} local
             </span>
           </div>
           <p className="mt-1 px-4 text-xs text-gray-500">
-            Saved on this device — not publicly shared
+            Videos shared by creators across CreatorFirst
           </p>
           <div className="mt-3 space-y-4 px-4">
-            {alluserVideos.map((video) => (
+            {allUserVideos.map((video) => (
               <VideoCard
                 key={video.id}
                 video={video}
+                demo={demo}
                 onCreatorClick={onCreatorClick}
                 onVideoClick={onVideoClick}
                 onOpenComments={onOpenComments}
