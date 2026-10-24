@@ -53,9 +53,6 @@ useEffect(() => {
   };
 }, []);
 
-  return () => listener.subscription.unsubscribe();
-}, []);
-
   const demo = useDemoState();
 const [view, setView] = useState<ViewKey>({ tab: "home" });
 const [commentVideoId, setCommentVideoId] = useState<string | null>(null);
