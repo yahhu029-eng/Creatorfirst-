@@ -97,21 +97,25 @@ const [newPassword, setNewPassword] = useState("");
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-2 block text-sm">
-            Password (minimum 6 characters)
-          </label>
-          <input
-            id="password"
-            type="password"
-            autoComplete={isSignup ? "new-password" : "current-password"}
-            minLength={6}
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
-            className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-white"
-          />
-        </div>
+  <label htmlFor="password" className="mb-2 block text-sm">
+    {isRecovery ? "New Password" : "Password (minimum 6 characters)"}
+  </label>
+  <input
+    id="password"
+    type="password"
+    autoComplete={isRecovery || isSignup ? "new-password" : "current-password"}
+    minLength={6}
+    required
+    value={isRecovery ? newPassword : password}
+    onChange={(e) =>
+      isRecovery
+        ? setNewPassword(e.target.value)
+        : setPassword(e.target.value)
+    }
+    placeholder={isRecovery ? "Enter new password" : "Enter password"}
+    className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-white"
+  />
+</div>
 
         {message && (
           <p role="status" className="break-words text-sm text-amber-300">
