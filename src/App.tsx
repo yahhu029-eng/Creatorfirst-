@@ -194,7 +194,16 @@ if (!authenticated || isPasswordRecovery) {
         </div>
       </div>
 
-      <BottomNav activeTab={activeTab} onTabChange={navigateTab} />
+      <BottomNav
+  activeTab={
+    view.tab === "discover" ||
+    view.tab === "upload" ||
+    view.tab === "profile"
+      ? view.tab
+      : "home"
+  }
+  onTabChange={navigateTab}
+/>
 
       {commentVideo && (
         <CommentSheet video={commentVideo} demo={demo} onClose={() => setCommentVideoId(null)} />
