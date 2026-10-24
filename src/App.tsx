@@ -22,6 +22,17 @@ const [checkingAuth, setCheckingAuth] = useState(true);
 
 
 useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+    (event, session) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setAuthenticated(false);
+      } else {
+        setAuthenticated(!!session);
+      }
+      setCheckingAuth(false);
+    }
+  );
+  
   supabase.auth.getSession()
     .then(({ data }) => {
       setAuthenticated(!!data.session);
