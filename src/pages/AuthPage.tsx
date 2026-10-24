@@ -18,6 +18,24 @@ const [newPassword, setNewPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+  if (recoveryMode) {
+    setIsRecovery(true);
+    setIsSignup(false);
+  }
+
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY") {
+      setIsRecovery(true);
+      setIsSignup(false);
+    }
+  });
+
+  return () => subscription.unsubscribe();
+}, [recoveryMode]);
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
