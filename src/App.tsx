@@ -43,6 +43,10 @@ useEffect(() => {
   return () => listener.subscription.unsubscribe();
 }, []);
 
+  const demo = useDemoState();
+const [view, setView] = useState<ViewKey>({ tab: "home" });
+const [commentVideoId, setCommentVideoId] = useState<string | null>(null);
+
 if (checkingAuth) {
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white flex items-center justify-center">
@@ -54,9 +58,6 @@ if (checkingAuth) {
 if (!authenticated) {
   return <AuthPage onLogin={() => setAuthenticated(true)} />;
 }
-  const demo = useDemoState();
-  const [view, setView] = useState<ViewKey>({ tab: "home" });
-  const [commentVideoId, setCommentVideoId] = useState<string | null>(null);
 
   const activeTab: TabKey =
     view.tab === "creator" || view.tab === "shorts" || view.tab === "video"
