@@ -10,6 +10,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { HomePage } from "@/pages/HomePage";
 import { DiscoverPage } from "@/pages/DiscoverPage";
+import { SettingsPage } from "@/pages/SettingsPage";
 import { UploadPage } from "@/pages/UploadPage";
 import { CreatorProfilePage } from "@/pages/CreatorProfilePage";
 import { VideoPlayer } from "@/components/VideoPlayer";
