@@ -54,6 +54,43 @@ useEffect(() => {
 }, []);
 
   const demo = useDemoState();
+  const [cloudVideos, setCloudVideos] =
+    useEffect(() => {
+  async function loadCloudVideos() {
+    const { data, error } = await supabase
+      .from("Videos")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Cloud videos error:", error.message);
+      return;
+    }
+
+    if (data) {
+      const mapped: Video[] = data.map((row) => ({
+        id: String(row.id),
+        title: row.title ?? "Untitled Video",
+        thumbnail: "",
+        creatorId: "me",
+        views: 0,
+        likes: 0,
+        uploadDate: "Recently",
+        duration: "0:00",
+        description: "",
+        isShort: true,
+        comments: [],
+        videoUrl: row.video_url,
+        isUserUploaded: true,
+      }));
+
+      setCloudVideos(mapped);
+    }
+  }
+
+  loadCloudVideos();
+}, []);
+  useState<Video[]>([]);
 const [view, setView] = useState<ViewKey>({ tab: "home" });
 const [commentVideoId, setCommentVideoId] = useState<string | null>(null);
 
@@ -106,7 +143,10 @@ if (!authenticated || isPasswordRecovery) {
 
   // Fullscreen video player
   if (view.tab === "video") {
-    const video = getVideoById(view.videoId, demo.userVideos);
+    const video = getVideoById(
+  view.videoId,
+  [...demo.userVideos, ...cloudVideos]
+);
     if (video) {
       return (
         <>
