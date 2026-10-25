@@ -1,4 +1,4 @@
-import { Search, Bell } from "lucide-react";
+import { Search, Bell, Settings } from "lucide-react";
 
 interface AppHeaderProps {
   title?: string;
