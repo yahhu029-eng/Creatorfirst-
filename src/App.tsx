@@ -106,7 +106,10 @@ if (!authenticated || isPasswordRecovery) {
 
   // Fullscreen video player
   if (view.tab === "video") {
-    const video = getVideoById(view.videoId, demo.userVideos);
+    const video = getVideoById(
+  view.videoId,
+  [...demo.userVideos, ...cloudVideos]
+);
     if (video) {
       return (
         <>
