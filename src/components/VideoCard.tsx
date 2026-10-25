@@ -1,4 +1,5 @@
 import { Heart, MessageCircle, Share2, MoreVertical, Play } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { Video } from "@/types";
 import type { DemoState } from "@/hooks/useDemoState";
 import { getCreatorById } from "@/data";
@@ -14,6 +15,7 @@ interface VideoCardProps {
 }
 
 export function VideoCard({ video, demo, onCreatorClick, onVideoClick, onOpenComments }: VideoCardProps) {
+  const [actualDuration, setActualDuration] = useState<string | null>(null);
   const creator = getCreatorById(video.creatorId);
   const liked = demo.isLiked(video.id);
   const likeCount = video.likes + (liked ? 1 : 0);
@@ -29,6 +31,14 @@ export function VideoCard({ video, demo, onCreatorClick, onVideoClick, onOpenCom
           {video.videoUrl ? (
             <video
               src={video.videoUrl}
+              onLoadedMetadata={(event) => {
+  const seconds = event.currentTarget.duration;
+  if (Number.isFinite(seconds)) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60).toString().padStart(2, "0");
+    setActualDuration(`${mins}:${secs}`);
+  }
+}}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               muted
               preload="metadata"
@@ -44,7 +54,7 @@ export function VideoCard({ video, demo, onCreatorClick, onVideoClick, onOpenCom
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
         <div className="absolute bottom-2 right-2 rounded-md bg-black/80 px-1.5 py-0.5 text-[11px] font-medium text-white">
-          {video.duration}
+          {actualDuration ?? video.duration}
         </div>
         {!video.videoUrl && (
           <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
