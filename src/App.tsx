@@ -3,7 +3,7 @@ import AuthPage from "@/pages/AuthPage";
 import { supabase } from "@/lib/supabase";
 import { useState } from "react";
 import { ChevronLeft } from "lucide-react";
-import type { TabKey, ViewKey } from "@/types";
+import type { TabKey, ViewKey, Video } from "@/types";
 import { useDemoState } from "@/hooks/useDemoState";
 import { getCreatorById, getVideoById, currentUser } from "@/data";
 import { AppHeader } from "@/components/AppHeader";
