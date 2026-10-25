@@ -4,9 +4,15 @@ interface AppHeaderProps {
   title?: string;
   showSearch?: boolean;
   onSearchClick?: () => void;
+  onSettingsClick?: () => void;
 }
 
-export function AppHeader({ title, showSearch = true, onSearchClick }: AppHeaderProps) {
+export function AppHeader({
+  title,
+  showSearch = true,
+  onSearchClick,
+  onSettingsClick,
+}: AppHeaderProps) {
   return (
     <header className="sticky top-0 z-40 border-b border-white/5 bg-[#0a0a0f]/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-md items-center justify-between px-4 py-3">
