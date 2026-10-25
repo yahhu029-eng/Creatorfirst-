@@ -51,6 +51,7 @@ export function CreatorProfilePage({
 
       if (data) {
         console.log("Profile videos found:", data.length);
+        setDebugMessage("Supabase videos found: " + data.length);
         setCloudVideos(
           data.map((row) => ({
             id: String(row.id),
