@@ -54,8 +54,11 @@ useEffect(() => {
 }, []);
 
   const demo = useDemoState();
-  const [cloudVideos, setCloudVideos] =
-    useEffect(() => {
+const [cloudVideos, setCloudVideos] = useState<Video[]>([]);
+const [view, setView] = useState<ViewKey>({ tab: "home" });
+const [commentVideoId, setCommentVideoId] = useState<string | null>(null);
+
+useEffect(() => {
   async function loadCloudVideos() {
     const { data, error } = await supabase
       .from("Videos")
@@ -83,14 +86,12 @@ useEffect(() => {
         videoUrl: row.video_url,
         isUserUploaded: true,
       }));
-
       setCloudVideos(mapped);
     }
   }
 
   loadCloudVideos();
 }, []);
-  useState<Video[]>([]);
 const [view, setView] = useState<ViewKey>({ tab: "home" });
 const [commentVideoId, setCommentVideoId] = useState<string | null>(null);
 
