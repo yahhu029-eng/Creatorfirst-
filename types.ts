@@ -45,6 +45,7 @@ export type TabKey = "home" | "discover" | "upload" | "profile";
 
 export type ViewKey =
   | { tab: TabKey }
+  | { tab: "settings" }
   | { tab: "creator"; creatorId: string }
   | { tab: "shorts"; startIndex: number }
   | { tab: "video"; videoId: string };
