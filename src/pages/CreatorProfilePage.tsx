@@ -40,9 +40,8 @@ export function CreatorProfilePage({
       if (!user) return;
 
       const { data, error } = await supabase
-        .from("Videos")
-        .select("*")
-        .eq("user_id", user.id);
+  .from("Videos")
+  .select("*");
 
       if (error) {
         console.error("Profile videos loading error:", error.message);
