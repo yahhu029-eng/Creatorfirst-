@@ -25,6 +25,13 @@ export function AppHeader({
           </h1>
         </div>
         <div className="flex items-center gap-3">
+          <button
+  onClick={onSettingsClick}
+  className="flex h-9 w-9 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-white/10 hover:text-white active:scale-90"
+  aria-label="Settings"
+>
+  <Settings size={20} />
+</button>
           {showSearch && (
             <button
               onClick={onSearchClick}
