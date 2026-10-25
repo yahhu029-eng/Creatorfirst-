@@ -26,6 +26,7 @@ export function CreatorProfilePage({
 
   
   const [cloudVideos, setCloudVideos] = useState<Video[]>([]);
+  const [debugMessage, setDebugMessage] = useState("वीडियो लोड हो रही हैं...");
 
   useEffect(() => {
     async function loadCloudVideos() {
@@ -33,6 +34,7 @@ export function CreatorProfilePage({
 
       const { data: authData } = await supabase.auth.getUser();
       const user = authData.user;
+      console.log("Profile user:", authData.user?.id);
 
       if (!user) return;
 
@@ -47,6 +49,7 @@ export function CreatorProfilePage({
       }
 
       if (data) {
+        console.log("Profile videos found:", data.length);
         setCloudVideos(
           data.map((row) => ({
             id: String(row.id),
