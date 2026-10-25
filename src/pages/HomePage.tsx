@@ -30,7 +30,7 @@ export function HomePage({
   useEffect(() => {
     async function loadVideos() {
       const { data, error } = await supabase
-        .from("videos")
+        .from("Videos")
         .select("*")
         .order("created_at", { ascending: false });
 
