@@ -124,6 +124,19 @@ if (!authenticated || isPasswordRecovery) {
   const commentVideo = commentVideoId ? getVideoById(commentVideoId, demo.userVideos) : null;
 
   // Fullscreen Shorts
+  if (view.tab === "settings") {
+  return (
+    <SettingsPage
+      onBack={goBack}
+      onLogout={async () => {
+        const { error } = await supabase.auth.signOut();
+        if (!error) {
+          setAuthenticated(false);
+        }
+      }}
+    />
+  );
+  }
   if (view.tab === "shorts") {
     return (
       <>
