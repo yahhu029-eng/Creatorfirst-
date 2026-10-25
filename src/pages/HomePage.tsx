@@ -41,7 +41,7 @@ export function HomePage({
 
       if (data) {
         const mappedVideos: Video[] = data.map((row) => ({
-          id: row.id,
+         id: String(row.id),
           title: row.title,
           thumbnail:
             "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg",
