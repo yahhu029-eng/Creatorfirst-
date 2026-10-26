@@ -196,8 +196,16 @@ if (!authenticated || isPasswordRecovery) {
       )}
 
       <div className={view.tab === "creator" ? "pt-14" : ""}>
-        {view.tab !== "creator" && view.tab !== "upload" && <AppHeader />}
-        {view.tab === "upload" && <AppHeader title="Upload" showSearch={false} />}
+        {view.tab !== "creator" && view.tab !== "upload" && (
+  <AppHeader onSettingsClick={() => setView({ tab: "settings" })} />
+)}
+        {view.tab === "upload" && (
+  <AppHeader
+    title="Upload"
+    showSearch={false}
+    onSettingsClick={() => setView({ tab: "settings" })}
+  />
+)}
 
         <div className="mx-auto max-w-md">
           {view.tab === "home" && (
