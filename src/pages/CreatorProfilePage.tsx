@@ -111,6 +111,31 @@ const allVideos = [
       demo.userVideos.reduce((sum, v) => sum + v.likes + (demo.isLiked(v.id) ? 1 : 0), 0)
     : creator.totalLikes;
 
+  async function saveProfile() {
+  const { data: authData } = await supabase.auth.getUser();
+  const user = authData.user;
+
+  if (!user) {
+    alert("Please login again.");
+    return;
+  }
+
+  const { error } = await supabase.from("profiles").upsert({
+    id: user.id,
+    display_name: profileName,
+    bio: profileBio,
+    updated_at: new Date().toISOString(),
+  });
+
+  if (error) {
+    alert("Profile save failed: " + error.message);
+    return;
+  }
+
+  alert("Profile updated successfully!");
+  setShowEditProfile(false);
+  }
+
   return (
     <div className="pb-24">
       <p className="px-4 py-2 text-xs text-gray-400">
@@ -137,10 +162,13 @@ const allVideos = [
             }`}
           />
           {isCurrentUser ? (
-            <button className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-gray-300 active:scale-95">
-              <Settings size={16} />
-              Edit
-            </button>
+            <button
+  onClick={() => setShowEditProfile(true)}
+  className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-gray-300 active:scale-95"
+>
+  <Settings size={16} />
+  Edit
+</button>
           ) : (
             <div className="flex items-center gap-2">
               <button className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-gray-300 active:scale-90">
@@ -191,6 +219,51 @@ const allVideos = [
           </span>
         </div>
       </div>
+
+      {showEditProfile && (
+  <div className="mx-4 mt-4 rounded-xl border border-white/10 bg-white/5 p-4">
+    <h2 className="mb-4 text-lg font-bold text-white">
+      Edit Profile
+    </h2>
+
+    <label className="mb-1 block text-sm text-gray-300">
+      Profile Name
+    </label>
+    <input
+      value={profileName}
+      onChange={(e) => setProfileName(e.target.value)}
+      className="mb-4 w-full rounded-lg border border-white/10 bg-black/30 p-3 text-white"
+      placeholder="Your name"
+    />
+
+    <label className="mb-1 block text-sm text-gray-300">
+      Bio
+    </label>
+    <textarea
+      value={profileBio}
+      onChange={(e) => setProfileBio(e.target.value)}
+      className="mb-4 w-full rounded-lg border border-white/10 bg-black/30 p-3 text-white"
+      placeholder="About you"
+      rows={3}
+    />
+
+    <div className="flex gap-2">
+      <button
+        onClick={saveProfile}
+        className="rounded-lg bg-rose-500 px-4 py-2 font-semibold text-white"
+      >
+        Save Changes
+      </button>
+
+      <button
+        onClick={() => setShowEditProfile(false)}
+        className="rounded-lg border border-white/20 px-4 py-2 text-gray-300"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+)}
 
       {/* Tabs */}
       <div className="mt-5 border-b border-white/10">
