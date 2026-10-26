@@ -456,12 +456,26 @@ const allVideos = [
                 onClick={() => onOpenShorts(0)}
                 className="group relative aspect-[9/16] overflow-hidden rounded-xl active:scale-95"
               >
-                <img
-                  src={short.thumbnail}
-                  alt={short.title}
-                  className="h-full w-full object-cover transition-transform group-hover:scale-110"
-                  loading="lazy"
-                />
+                <div className="relative">
+  <img
+    src={profileAvatar || creator.avatar}
+    alt={profileName}
+    className="h-24 w-24 rounded-full object-cover ring-4 ring-[#0a0a0f]"
+  />
+
+  {isCurrentUser && (
+    <label className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-rose-500 p-2 text-white">
+      <Pencil size={14} />
+      <input
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handlePhotoChange}
+      />
+    </label>
+  )}
+</div>
+                
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                 <div className="absolute bottom-1.5 left-1.5 right-1.5">
                   <p className="line-clamp-2 text-[10px] font-semibold leading-tight text-white">
