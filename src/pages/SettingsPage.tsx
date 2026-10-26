@@ -9,6 +9,7 @@ interface SettingsPageProps {
 
 export function SettingsPage({ onBack, onLogout }: SettingsPageProps) {
   const [showAccountDetails, setShowAccountDetails] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [userEmail, setUserEmail] = useState("");
 
 useEffect(() => {
