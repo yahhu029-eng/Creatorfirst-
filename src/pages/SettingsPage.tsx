@@ -9,6 +9,7 @@ interface SettingsPageProps {
 
 export function SettingsPage({ onBack, onLogout }: SettingsPageProps) {
   const [showAccountDetails, setShowAccountDetails] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
 
 useEffect(() => {
   supabase.auth.getUser().then(({ data }) => {
