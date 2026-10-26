@@ -202,7 +202,7 @@ const allVideos = [
   onClick={() => setShowEditProfile(true)}
   className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-gray-300 active:scale-95"
 >
-  <Settings size={16} />
+  <Pencil size={16} />
   Edit
 </button>
           ) : (
