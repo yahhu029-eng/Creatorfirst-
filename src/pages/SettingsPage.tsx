@@ -68,6 +68,48 @@ useEffect(() => {
         </button>
       </main>
 
+      {showPrivacySecurity && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+    <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#15151d] p-5">
+      <h2 className="text-lg font-bold">Privacy & Security</h2>
+
+      <p className="mt-4 text-sm text-gray-300">
+        Password reset ke liye tumhare registered email par reset link bheja ja sakta hai.
+      </p>
+
+      <button
+        onClick={async () => {
+          const { data } = await supabase.auth.getUser();
+          const email = data.user?.email;
+
+          if (!email) {
+            alert("Login email nahi mila. Dobara login karo.");
+            return;
+          }
+
+          const { error } = await supabase.auth.resetPasswordForEmail(email);
+
+          if (error) {
+            alert(error.message);
+          } else {
+            alert("Password reset link ke liye apna email check karo.");
+          }
+        }}
+        className="mt-5 w-full rounded-lg bg-indigo-600 px-4 py-2 font-semibold hover:bg-indigo-500"
+      >
+        Send Password Reset Link
+      </button>
+
+      <button
+        onClick={() => setShowPrivacySecurity(false)}
+        className="mt-3 w-full rounded-lg bg-white/10 px-4 py-2 hover:bg-white/20"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
       {showAccountDetails && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
     <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#15151d] p-5">
