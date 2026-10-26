@@ -27,6 +27,42 @@ export function CreatorProfilePage({
 const [profileName, setProfileName] = useState(creator.name);
 const [profileBio, setProfileBio] = useState(creator.bio);
 
+  useEffect(() => {
+  async function loadProfile() {
+    if (!isCurrentUser) return;
+
+    const { data: authData } = await supabase.auth.getUser();
+    const user = authData.user;
+
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("display_name, bio")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Profile loading error:", error.message);
+      return;
+    }
+
+    setProfileName(
+      data?.display_name ||
+      user.user_metadata?.full_name ||
+      user.user_metadata?.name ||
+      user.email?.split("@")[0] ||
+      creator.name
+    );
+
+    if (data?.bio != null) {
+      setProfileBio(data.bio);
+    }
+  }
+
+  loadProfile();
+}, [isCurrentUser, creator.name]);
+
   
   const [cloudVideos, setCloudVideos] = useState<Video[]>([]);
   const [debugMessage, setDebugMessage] = useState("वीडियो लोड हो रही हैं...");
