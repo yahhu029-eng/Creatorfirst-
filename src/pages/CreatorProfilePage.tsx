@@ -39,7 +39,7 @@ const [profileBio, setProfileBio] = useState(creator.bio);
 
     const { data, error } = await supabase
       .from("profiles")
-      .select("display_name, bio")
+      .select("display_name, bio, avatar_url")
       .eq("id", user.id)
       .maybeSingle();
 
@@ -59,7 +59,11 @@ const [profileBio, setProfileBio] = useState(creator.bio);
     if (data?.bio != null) {
       setProfileBio(data.bio);
     }
-  }
+    if (data?.avatar_url) {
+  setProfileAvatar(data.avatar_url);
+    }
+}
+    
 
   loadProfile();
 }, [isCurrentUser, creator.name]);
