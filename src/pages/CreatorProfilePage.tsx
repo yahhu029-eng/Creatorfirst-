@@ -148,6 +148,55 @@ const allVideos = [
       demo.userVideos.reduce((sum, v) => sum + v.likes + (demo.isLiked(v.id) ? 1 : 0), 0)
     : creator.totalLikes;
 
+  
+async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const { data: authData } = await supabase.auth.getUser();
+  const user = authData.user;
+
+  if (!user) {
+    alert("Please login again.");
+    return;
+  }
+
+  const extension = file.name.split(".").pop() || "jpg";
+  const path = `avatars/${user.id}/${Date.now()}.${extension}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from("Videos")
+    .upload(path, file, { contentType: file.type });
+
+  if (uploadError) {
+    alert("Photo upload failed: " + uploadError.message);
+    return;
+  }
+
+  const { data: urlData } = supabase.storage
+    .from("Videos")
+    .getPublicUrl(path);
+
+  const avatarUrl = urlData.publicUrl;
+
+  const { error: profileError } = await supabase.from("profiles").upsert({
+    id: user.id,
+    display_name: profileName,
+    avatar_url: avatarUrl,
+    bio: profileBio,
+    updated_at: new Date().toISOString(),
+  });
+
+  if (profileError) {
+    alert("Profile save failed: " + profileError.message);
+    return;
+  }
+
+  setProfileAvatar(avatarUrl);
+  alert("Profile photo updated!");
+}
+  
+
   async function saveProfile() {
   const { data: authData } = await supabase.auth.getUser();
   const user = authData.user;
