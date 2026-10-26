@@ -136,31 +136,6 @@ const allVideos = [
   setShowEditProfile(false);
   }
 
-  async function saveProfile() {
-  const { data: authData } = await supabase.auth.getUser();
-  const user = authData.user;
-
-  if (!user) {
-    alert("Please login again.");
-    return;
-  }
-
-  const { error } = await supabase.from("profiles").upsert({
-    id: user.id,
-    display_name: profileName,
-    bio: profileBio,
-    updated_at: new Date().toISOString(),
-  });
-
-  if (error) {
-    alert("Profile save failed: " + error.message);
-    return;
-  }
-
-  alert("Profile updated successfully!");
-  setShowEditProfile(false);
-  }
-
   return (
     <div className="pb-24">
       <p className="px-4 py-2 text-xs text-gray-400">
