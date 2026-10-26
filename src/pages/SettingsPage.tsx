@@ -1,4 +1,4 @@
-
+import { useState } from "react";
 import { ChevronLeft, LogOut, Shield, UserRound } from "lucide-react";
 
 interface SettingsPageProps {
@@ -7,6 +7,8 @@ interface SettingsPageProps {
 }
 
 export function SettingsPage({ onBack, onLogout }: SettingsPageProps) {
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white">
       <header className="flex items-center gap-3 border-b border-white/10 p-4">
@@ -21,38 +23,73 @@ export function SettingsPage({ onBack, onLogout }: SettingsPageProps) {
       </header>
 
       <main className="mx-auto max-w-md space-y-4 p-4">
-        <section className="rounded-xl border border-white/10 p-4">
-          <div className="flex items-center gap-3">
-            <UserRound size={22} />
-            <div>
-              <h2 className="font-semibold">Account</h2>
-              <p className="text-sm text-gray-400">
-                Manage your CreatorFirst account
-              </p>
-            </div>
+        <button
+          onClick={() => alert("Account Management will be added next.")}
+          className="flex w-full items-center gap-3 rounded-xl border border-white/10 p-4 text-left hover:bg-white/5"
+        >
+          <UserRound size={22} />
+          <div>
+            <h2 className="font-semibold">Account Management</h2>
+            <p className="text-sm text-gray-400">
+              Manage your CreatorFirst account
+            </p>
           </div>
-        </section>
-
-        <section className="rounded-xl border border-white/10 p-4">
-          <div className="flex items-center gap-3">
-            <Shield size={22} />
-            <div>
-              <h2 className="font-semibold">Privacy & Security</h2>
-              <p className="text-sm text-gray-400">
-                Account and privacy settings
-              </p>
-            </div>
-          </div>
-        </section>
+        </button>
 
         <button
-          onClick={onLogout}
+          onClick={() => alert("Privacy & Security will be added next.")}
+          className="flex w-full items-center gap-3 rounded-xl border border-white/10 p-4 text-left hover:bg-white/5"
+        >
+          <Shield size={22} />
+          <div>
+            <h2 className="font-semibold">Privacy & Security</h2>
+            <p className="text-sm text-gray-400">
+              Account and privacy settings
+            </p>
+          </div>
+        </button>
+
+        <button
+          onClick={() => setShowLogoutConfirm(true)}
           className="flex w-full items-center gap-3 rounded-xl border border-rose-500/30 p-4 text-rose-400 hover:bg-rose-500/10"
         >
           <LogOut size={22} />
           <span className="font-semibold">Log Out</span>
         </button>
       </main>
+
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="logout-title"
+            className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#15151d] p-5 shadow-xl"
+          >
+            <h2 id="logout-title" className="text-lg font-bold">
+              Log Out?
+            </h2>
+            <p className="mt-2 text-sm text-gray-300">
+              Are you sure you want to log out of CreatorFirst?
+            </p>
+
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                className="rounded-lg px-4 py-2 text-sm hover:bg-white/10"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={onLogout}
+                className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold hover:bg-rose-500"
+              >
+                Log Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
