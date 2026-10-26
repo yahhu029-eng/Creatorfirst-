@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BadgeCheck, Heart, Video as VideoIcon, Share2, Settings, Grid3x3 } from "lucide-react";
+import { BadgeCheck, Heart, Video as VideoIcon, Share2, Pencil, Grid3x3 } from "lucide-react";
 import type { Creator, Video } from "@/types";
 import type { DemoState } from "@/hooks/useDemoState";
 import { getVideosByCreator, getVideoById } from "@/data";
