@@ -210,7 +210,7 @@ const allVideos = [
         </div>
 
         {/* Bio */}
-        <p className="mt-3 text-sm leading-relaxed text-gray-300">{creator.bio}</p>
+        <p className="mt-3 text-sm leading-relaxed text-gray-300">{creator.profilebio}</p>
 
         {/* Category tag */}
         <div className="mt-3">
