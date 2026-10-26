@@ -265,44 +265,6 @@ const allVideos = [
   </div>
 )}
 
-      {showEditProfile && (
-  <div className="mx-4 mt-4 rounded-xl border border-white/10 bg-white/5 p-4">
-    <h2 className="mb-4 text-lg font-bold text-white">Edit Profile</h2>
-
-    <label className="mb-1 block text-sm text-gray-300">Profile Name</label>
-    <input
-      value={profileName}
-      onChange={(e) => setProfileName(e.target.value)}
-      className="mb-4 w-full rounded-lg border border-white/10 bg-black/30 p-3 text-white"
-      placeholder="Your name"
-    />
-
-    <label className="mb-1 block text-sm text-gray-300">Bio</label>
-    <textarea
-      value={profileBio}
-      onChange={(e) => setProfileBio(e.target.value)}
-      className="mb-4 w-full rounded-lg border border-white/10 bg-black/30 p-3 text-white"
-      placeholder="About you"
-      rows={3}
-    />
-
-    <div className="flex gap-2">
-      <button
-        onClick={saveProfile}
-        className="rounded-lg bg-rose-500 px-4 py-2 font-semibold text-white"
-      >
-        Save Changes
-      </button>
-      <button
-        onClick={() => setShowEditProfile(false)}
-        className="rounded-lg border border-white/20 px-4 py-2 text-gray-300"
-      >
-        Cancel
-      </button>
-    </div>
-  </div>
-)}
-
       {/* Tabs */}
       <div className="mt-5 border-b border-white/10">
         <div className="mx-auto flex max-w-md">
