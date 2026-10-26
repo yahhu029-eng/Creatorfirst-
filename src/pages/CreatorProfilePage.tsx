@@ -23,6 +23,9 @@ export function CreatorProfilePage({
   isCurrentUser = false,
 }: CreatorProfilePageProps) {
   const [tab, setTab] = useState<"videos" | "shorts" | "liked">("videos");
+  const [showEditProfile, setShowEditProfile] = useState(false);
+const [profileName, setProfileName] = useState(creator.name);
+const [profileBio, setProfileBio] = useState(creator.bio);
 
   
   const [cloudVideos, setCloudVideos] = useState<Video[]>([]);
