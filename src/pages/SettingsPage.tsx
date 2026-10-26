@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, LogOut, Shield, UserRound } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 interface SettingsPageProps {
   onBack: () => void;
@@ -7,7 +8,13 @@ interface SettingsPageProps {
 }
 
 export function SettingsPage({ onBack, onLogout }: SettingsPageProps) {
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [showAccountDetails, setShowAccountDetails] = useState(false);
+
+useEffect(() => {
+  supabase.auth.getUser().then(({ data }) => {
+    setUserEmail(data.user?.email ?? "Email unavailable");
+  });
+}, []);
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white">
