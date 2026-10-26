@@ -31,7 +31,7 @@ useEffect(() => {
 
       <main className="mx-auto max-w-md space-y-4 p-4">
         <button
-          onClick={() => alert("Account Management will be added next.")}
+          onClick={() => setShowAccountDetails(true)}
           className="flex w-full items-center gap-3 rounded-xl border border-white/10 p-4 text-left hover:bg-white/5"
         >
           <UserRound size={22} />
@@ -64,6 +64,24 @@ useEffect(() => {
           <span className="font-semibold">Log Out</span>
         </button>
       </main>
+
+      {showAccountDetails && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+    <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#15151d] p-5">
+      <h2 className="text-lg font-bold">Account Management</h2>
+
+      <p className="mt-4 text-sm text-gray-400">Login Email</p>
+      <p className="mt-1 break-all text-white">{userEmail || "Loading..."}</p>
+
+      <button
+        onClick={() => setShowAccountDetails(false)}
+        className="mt-6 w-full rounded-lg bg-white/10 px-4 py-2 hover:bg-white/20"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
 
       {showLogoutConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
