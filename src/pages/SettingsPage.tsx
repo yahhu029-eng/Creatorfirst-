@@ -9,6 +9,7 @@ interface SettingsPageProps {
 
 export function SettingsPage({ onBack, onLogout }: SettingsPageProps) {
   const [showAccountDetails, setShowAccountDetails] = useState(false);
+  const [showPrivacySecurity, setShowPrivacySecurity] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [userEmail, setUserEmail] = useState("");
 
@@ -46,7 +47,7 @@ useEffect(() => {
         </button>
 
         <button
-          onClick={() => alert("Privacy & Security will be added next.")}
+          onClick={() => setShowPrivacySecurity(true)}
           className="flex w-full items-center gap-3 rounded-xl border border-white/10 p-4 text-left hover:bg-white/5"
         >
           <Shield size={22} />
