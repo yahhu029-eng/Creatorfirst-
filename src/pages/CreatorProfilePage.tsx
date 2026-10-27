@@ -510,7 +510,8 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
                 onClick={() => onOpenShorts(0)}
                 className="group relative aspect-[9/16] overflow-hidden rounded-xl active:scale-95"
               >
-                <div className="relative">
+                
+<div className="relative">
   <img
     src={profileAvatar || creator.avatar}
     alt={profileName}
@@ -518,33 +519,25 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
   />
 
   {isCurrentUser && (
-<>
-<label
-htmlFor="profile-photo-input"
-className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-rose-500 p-2 text-white"
->
-<Pencil size={14} />
-</label>
-<input
-id="profile-photo-input"
-type="file"
-accept="image/*"
-className="hidden"
-onChange={handlePhotoChange}
-/>
-</>
-)}
-    <label className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-rose-500 p-2 text-white">
-      <Pencil size={14} />
+    <>
+      <label
+        htmlFor="profile-photo-input"
+        className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-rose-500 p-2 text-white"
+      >
+        <Pencil size={14} />
+      </label>
+
       <input
+        id="profile-photo-input"
         type="file"
         accept="image/*"
         className="hidden"
         onChange={handlePhotoChange}
       />
-    </label>
+    </>
   )}
 </div>
+                
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                 <div className="absolute bottom-1.5 left-1.5 right-1.5">
