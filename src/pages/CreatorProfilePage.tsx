@@ -245,12 +245,12 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
       <div className="relative -mt-12 px-4">
         <div className="flex items-end justify-between">
           <img
-            src={creator.avatar}
-            alt={creator.name}
-            className={`h-24 w-24 rounded-full object-cover ring-4 ring-[#0a0a0f] ${
-              creator.isSmallCreator ? "ring-amber-400/50" : ""
-            }`}
-          />
+  src={creator.avatar}
+  alt={creator.name}
+  className={`h-24 w-24 rounded-full object-cover ring-4 ring-[#0a0a0f] ${
+    creator.isSmallCreator ? "ring-amber-400/50" : ""
+  }`}
+/>
           {isCurrentUser ? (
             <button
   onClick={() => setShowEditProfile(true)}
