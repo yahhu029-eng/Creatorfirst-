@@ -298,6 +298,7 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
             )}
           </div>
           <p className="text-sm text-gray-500">{creator.handle}</p>
+          <p className="mt-2 text-sm text-gray-400">{profileBio}</p>
         </div>
 
         {/* Stats */}
