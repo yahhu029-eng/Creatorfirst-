@@ -289,7 +289,7 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
         {/* Name & handle */}
         <div className="mt-3">
           <div className="flex items-center gap-1.5">
-            <h1 className="text-xl font-bold text-white">{creator.name}</h1>
+            <h1 className="text-xl font-bold text-white">{profileName}</h1>
             {creator.isVerified && <BadgeCheck size={20} className="text-sky-400" />}
             {creator.isSmallCreator && (
               <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-400">
