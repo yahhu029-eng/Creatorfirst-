@@ -27,6 +27,7 @@ export function CreatorProfilePage({
 const [profileName, setProfileName] = useState(creator.name);
 const [profileBio, setProfileBio] = useState(creator.bio);
   const [profileAvatar, setProfileAvatar] = useState(creator.avatar);
+  const [showPhotoPreview, setShowPhotoPreview] = useState(false);
 
   useEffect(() => {
   async function loadProfile() {
