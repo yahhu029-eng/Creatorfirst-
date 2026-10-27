@@ -244,13 +244,30 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
       {/* Profile header */}
       <div className="relative -mt-12 px-4">
         <div className="flex items-end justify-between">
-          <img
-  src={creator.avatar}
-  alt={creator.name}
-  className={`h-24 w-24 rounded-full object-cover ring-4 ring-[#0a0a0f] ${
-    creator.isSmallCreator ? "ring-amber-400/50" : ""
-  }`}
-/>
+         <div className="relative">
+  <img
+    src={profileAvatar || creator.avatar}
+    alt={profileName}
+    className="h-24 w-24 rounded-full object-cover ring-4 ring-[#0a0a0f]"
+  />
+  {isCurrentUser && (
+    <>
+      <label
+        htmlFor="profile-photo-input"
+        className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-rose-500 p-2 text-white"
+      >
+        <Pencil size={14} />
+      </label>
+      <input
+        id="profile-photo-input"
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handlePhotoChange}
+      />
+    </>
+  )}
+</div>
           {isCurrentUser ? (
             <button
   onClick={() => setShowEditProfile(true)}
