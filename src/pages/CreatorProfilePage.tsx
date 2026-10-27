@@ -574,10 +574,35 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
           </div>
         )}
 
+        
         {tab === "shorts" && displayedVideos.length === 0 && (
           <p className="py-12 text-center text-sm text-gray-500">No shorts yet</p>
         )}
       </div>
+
+      {showPhotoPreview && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
+          onClick={() => setShowPhotoPreview(false)}
+        >
+          <button
+            type="button"
+            aria-label="Close photo preview"
+            className="absolute right-5 top-5 rounded-full bg-white/10 px-4 py-2 text-xl text-white"
+            onClick={() => setShowPhotoPreview(false)}
+          >
+            ✕
+          </button>
+
+          <img
+            src={profileAvatar || creator.avatar}
+            alt={profileName}
+            className="max-h-[85vh] max-w-[90vw] rounded-xl object-contain shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 }
+
