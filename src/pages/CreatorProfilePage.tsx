@@ -518,6 +518,22 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
   />
 
   {isCurrentUser && (
+<>
+<label
+htmlFor="profile-photo-input"
+className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-rose-500 p-2 text-white"
+>
+<Pencil size={14} />
+</label>
+<input
+id="profile-photo-input"
+type="file"
+accept="image/*"
+className="hidden"
+onChange={handlePhotoChange}
+/>
+</>
+)}
     <label className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-rose-500 p-2 text-white">
       <Pencil size={14} />
       <input
