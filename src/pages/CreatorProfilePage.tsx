@@ -72,6 +72,31 @@ const [profileBio, setProfileBio] = useState(creator.bio);
   
   const [cloudVideos, setCloudVideos] = useState<Video[]>([]);
   const [debugMessage, setDebugMessage] = useState("वीडियो लोड हो रही हैं...");
+  const getVideoDuration = (url: string): Promise<string> =>
+  new Promise((resolve) => {
+    const video = document.createElement("video");
+    video.preload = "metadata";
+
+    video.onloadedmetadata = () => {
+      const seconds = Math.floor(video.duration);
+
+      if (!Number.isFinite(seconds)) {
+        resolve("0:00");
+      } else {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+
+        resolve(
+          `${minutes}:${String(remainingSeconds).padStart(2, "0")}`
+        );
+      }
+
+      video.remove();
+    };
+
+    video.onerror = () => resolve("0:00");
+    video.src = url;
+  });
 
   useEffect(() => {
     async function loadCloudVideos() {
