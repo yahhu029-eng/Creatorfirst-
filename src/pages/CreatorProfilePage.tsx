@@ -249,6 +249,7 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
   <img
     src={profileAvatar || creator.avatar}
     alt={profileName}
+    onClick={() => setShowPhotoPreview(true)}
     className="h-24 w-24 rounded-full object-cover ring-4 ring-[#0a0a0f]"
   />
   {isCurrentUser && (
