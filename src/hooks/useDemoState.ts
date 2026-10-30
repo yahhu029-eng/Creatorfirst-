@@ -116,6 +116,9 @@ export function useDemoState() {
       [videoId]: [...(prev[videoId] ?? []), comment],
     }));
   }, []);
+    const removeUserVideo = useCallback((videoId: string) => {
+    setUserVideos((prev) => prev.filter((video) => video.id !== videoId));
+  }, []);
 
   const addUserVideo = useCallback((video: Video) => {
     setUserVideos((prev) => [video, ...prev]);
@@ -136,6 +139,7 @@ export function useDemoState() {
     toggleFollow,
     addComment,
     addUserVideo,
+    removeUserVideo,
     isLiked,
     isFollowing,
   };
