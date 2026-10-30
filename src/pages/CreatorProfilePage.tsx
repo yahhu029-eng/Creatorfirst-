@@ -513,8 +513,8 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
                     <Heart size={11} className="text-rose-500" fill="currentColor" />
                     {formatCount(video.likes + 1)}
                   </div>
-                </div>
-              </button>
+               </div>
+              </div>
             ))}
           </div>
         )}
