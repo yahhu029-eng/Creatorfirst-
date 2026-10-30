@@ -486,11 +486,11 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
         {tab === "liked" && isCurrentUser && likedVideos.length > 0 && (
           <div className="space-y-4">
             {likedVideos.map((video) => (
-              <button
-                key={video.id}
-                onClick={() => onVideoClick(video.id)}
-                className="group flex w-full gap-3 rounded-xl p-1 text-left active:scale-[0.98]"
-              >
+              <div
+  key={video.id}
+  onClick={() => onVideoClick(video.id)}
+  className="group flex w-full gap-3 rounded-xl p-1 text-left active:scale-[0.98]"
+>
                 <div className="relative h-20 w-36 shrink-0 overflow-hidden rounded-lg">
                   <img
                     src={video.thumbnail}
