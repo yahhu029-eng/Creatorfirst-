@@ -1,4 +1,4 @@
-ßimport { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BadgeCheck, Heart, Video as VideoIcon, Share2, Pencil, Grid3x3, Trash2 } from "lucide-react";
 import type { Creator, Video } from "@/types";
 import type { DemoState } from "@/hooks/useDemoState";
