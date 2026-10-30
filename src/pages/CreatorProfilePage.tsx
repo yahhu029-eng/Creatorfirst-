@@ -150,7 +150,41 @@ setCloudVideos(videosWithDuration);
 
   // For current user, use userVideos from demo state
   
-const allVideos = [
+ async function handleDeleteVideo(video: Video) {
+  if (!isCurrentUser || !video.isUserUploaded) return;
+
+  const confirmed = window.confirm(
+    `Delete "${video.title}" permanently?`
+  );
+
+  if (!confirmed) return;
+
+  const { data: authData } = await supabase.auth.getUser();
+  const user = authData.user;
+
+  if (!user) {
+    alert("Please login again.");
+    return;
+  }
+
+  const { error } = await supabase
+    .from("Videos")
+    .delete()
+    .eq("id", video.id)
+    .eq("user_id", user.id);
+
+  if (error) {
+    alert("Video delete failed: " + error.message);
+    return;
+  }
+
+  setCloudVideos((previous) =>
+    previous.filter((item) => item.id !== video.id)
+  );
+
+  alert("Video deleted successfully.");
+  }
+  const allVideos = [
   ...getVideosByCreator(creator.id, demo.userVideos),
   ...(isCurrentUser ? cloudVideos : []),
 ];
