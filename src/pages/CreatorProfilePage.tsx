@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+ßimport { useEffect, useState } from "react";
 import { BadgeCheck, Heart, Video as VideoIcon, Share2, Pencil, Grid3x3, Trash2 } from "lucide-react";
 import type { Creator, Video } from "@/types";
 import type { DemoState } from "@/hooks/useDemoState";
@@ -159,31 +159,46 @@ setCloudVideos(videosWithDuration);
 
   if (!confirmed) return;
 
-  const { data: authData } = await supabase.auth.getUser();
+  const videoId = Number(video.id);
+
+  if (!Number.isSafeInteger(videoId) || videoId <= 0) {
+    alert("Invalid video ID: " + video.id);
+    return;
+  }
+
+  const { data: authData, error: authError } =
+    await supabase.auth.getUser();
+
   const user = authData.user;
 
-  if (!user) {
+  if (authError || !user) {
     alert("Please login again.");
     return;
   }
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("Videos")
     .delete()
-    .eq("id", video.id)
-    .eq("user_id", user.id);
+    .eq("id", videoId)
+    .eq("user_id", user.id)
+    .select("id");
 
   if (error) {
     alert("Video delete failed: " + error.message);
     return;
   }
 
+  if (!data || data.length === 0) {
+    alert("Video not deleted. Check video ownership and database policy.");
+    return;
+  }
+
   setCloudVideos((previous) =>
-    previous.filter((item) => item.id !== video.id)
+    previous.filter((item) => String(item.id) !== String(video.id))
   );
 
   alert("Video deleted successfully.");
-  }
+ }
   const allVideos = [
   ...getVideosByCreator(creator.id, demo.userVideos),
   ...(isCurrentUser ? cloudVideos : []),
