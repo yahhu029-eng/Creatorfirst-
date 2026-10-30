@@ -581,9 +581,21 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
                       fill="currentColor"
                     />
                     {formatCount(video.likes + (demo.isLiked(video.id) ? 1 : 0))}
-                  </div>
+                                </div>
                 </div>
               </button>
+
+              {isCurrentUser && video.isUserUploaded && (
+                <button
+                  type="button"
+                  onClick={() => handleDeleteVideo(video)}
+                  aria-label={`Delete ${video.title}`}
+                  className="shrink-0 rounded-lg p-2 text-red-400 hover:bg-white/10"
+                >
+                  <Trash2 size={18} />
+                </button>
+              )}
+            </div>
             ))}
           </div>
         )}
