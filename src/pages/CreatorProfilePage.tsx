@@ -119,27 +119,29 @@ const [profileBio, setProfileBio] = useState(creator.bio);
       }
 
       if (data) {
-        console.log("Profile videos found:", data.length);
-        setDebugMessage("Supabase videos found: " + data.length);
-        setCloudVideos(
-          data.map((row) => ({
-            id: String(row.id),
-            title: row.title || "Untitled Video",
-            thumbnail: "",
-            creatorId: creator.id,
-            views: 0,
-            likes: 0,
-            uploadDate: "Recently",
-            duration: "0:00",
-            description: "",
-            isShort: false,
-            comments: [],
-            videoUrl: row.video_url,
-            isUserUploaded: true,
-          }))
-        );
+console.log("Profile videos found:", data.length);
+setDebugMessage("Supabase videos found: " + data.length);
+
+const videosWithDuration = await Promise.all(
+data.map(async (row) => ({
+id: String(row.id),
+title: row.title || "Untitled Video",
+thumbnail: "",
+creatorId: creator.id,
+views: 0,
+likes: 0,
+uploadDate: "Recently",
+duration: await getVideoDuration(row.video_url),
+description: "",
+isShort: false,
+comments: [],
+videoUrl: row.video_url,
+isUserUploaded: true,
+}))
+);
+
+setCloudVideos(videosWithDuration);
       }
-    }
 
     loadCloudVideos();
   }, [isCurrentUser, creator.id]);
