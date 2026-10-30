@@ -533,10 +533,15 @@ async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
         {tab === "videos" && displayedVideos.length > 0 && (
           <div className="space-y-4">
             {displayedVideos.map((video) => (
-              <div
+             <div
   key={video.id}
-  className="group flex w-full gap-3 rounded-xl p-1 text-left"
+  className="flex w-full items-center gap-2 rounded-xl p-1"
 >
+  <button
+    type="button"
+    onClick={() => onVideoClick(video.id)}
+    className="group flex min-w-0 flex-1 gap-3 text-left active:scale-[0.98]"
+  >
                 <div className="relative h-20 w-36 shrink-0 overflow-hidden rounded-lg">
                   {video.videoUrl ? (
                     <video
