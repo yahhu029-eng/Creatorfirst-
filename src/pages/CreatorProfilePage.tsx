@@ -142,6 +142,7 @@ isUserUploaded: true,
 
 setCloudVideos(videosWithDuration);
       }
+    }
 
     loadCloudVideos();
   }, [isCurrentUser, creator.id]);
